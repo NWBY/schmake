@@ -1,4 +1,10 @@
-use std::{borrow::Borrow, fs::File, io::{BufRead, BufReader}, path::PathBuf};
+use std::{
+    borrow::Borrow,
+    fmt::format,
+    fs::{self, File},
+    io::{BufRead, BufReader, BufWriter, Write},
+    path::PathBuf,
+};
 
 use clap::{Parser, Subcommand};
 
@@ -25,9 +31,9 @@ enum Commands {
 
 fn main() {
     let cli = Cli::parse();
-    
+
     let reader = BufReader::new(File::open(cli.file).expect("cannot open file"));
-    
+
     let mut all_lines: Vec<Vec<String>> = vec![];
 
     for line in reader.lines() {
@@ -36,20 +42,39 @@ fn main() {
         for word in line_clone.split_whitespace() {
             cols.push(String::from(word));
         }
-        
+
         all_lines.push(cols);
     }
-    
-    println!("{:?}", all_lines);
-    
-    let mut output = "";
+
+    // let mut output = String::from("");
+    let f = File::create("./test.sql").expect("unable to create file");
+    let mut f = BufWriter::new(f);
 
     for (index, row) in all_lines.iter().enumerate() {
-        if index == 0 {
-            // first row so this is the table name
-            
+        // for (inner_index, token) in row.iter().enumerate() {
+        if row[0].as_str() == "table" {
+            let output = format!("CREATE TABLE [IF NOT EXISTS] {} (", row[index + 1]);
+            write!(f, "{}", output).expect("unable to write");
+            // fs::write("./test.sql", output).expect("Unable to write file");
+        } else {
+            let mut clone = row.clone();
+            let col = &row[0];
+            let col_type = &row[1];
+            clone.remove(0);
+            clone.remove(0);
+            let addition = format!("\n\t{} {} {:?}", col, calculate_col_type(col_type), clone);
+            write!(f, "{}", addition).expect("unable to write");
         }
+
+        if index == all_lines.len() - 1 {
+            write!(f, "\n);").expect("unable to write");
+        }
+
+        // output.push_str(&addition);
+        // }
     }
+
+    // print!("{:?}", output);
 
     // You can check for the existence of subcommands, and if found use their
     // matches just as you would the top level cmd
@@ -65,4 +90,21 @@ fn main() {
     }
 
     // Continued program logic goes here...
+}
+
+fn calculate_col_type(col_type: &String) -> &str {
+    let datatype = match col_type.as_str() {
+        // Integer types
+        "serial" | "SERIAL" => "SERIAL",
+        "int" | "INT" => "INT",
+        "smallint" | "SMALLINT" => "SMALLINT",
+
+        // Character types
+        "char" | "CHAR" => "CHAR",
+        "varchar" | "VARCHAR" => "VARCHAR",
+        "text" | "TEXT" => "TEXT",
+        _ => "Hello World",
+    };
+
+    return datatype;
 }
