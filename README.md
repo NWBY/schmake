@@ -29,3 +29,13 @@ schmake --file ./users.schm
 ```
 
 And magic, you now have the definition for your users table
+
+### Constraints
+
+Schmake provides a number of aliases for common constraints
+
+- `PRIMARY KEY`
+  - `pk`
+- `NOT NULL`
+  - `nn`
+  - `not null`
