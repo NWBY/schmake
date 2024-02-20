@@ -98,11 +98,15 @@ fn calculate_col_type(col_type: &String) -> &str {
         "serial" | "SERIAL" => "SERIAL",
         "int" | "INT" => "INT",
         "smallint" | "SMALLINT" => "SMALLINT",
+        "bigint" | "BIGINT" => "BIGINT",
 
         // Character types
         "char" | "CHAR" => "CHAR",
         "varchar" | "VARCHAR" => "VARCHAR(255)",
         "text" | "TEXT" => "TEXT",
+
+        // Boolean type
+        "boolean" | "bool" => "BOOLEAN",
         _ => "Hello World",
     };
 
