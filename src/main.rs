@@ -62,19 +62,19 @@ fn main() {
             let col_type = &row[1];
             clone.remove(0);
             clone.remove(0);
-            let addition = format!("\n\t{} {} {:?}", col, calculate_col_type(col_type), clone);
+            let addition = format!(
+                "\n\t{} {} {}",
+                col,
+                calculate_col_type(col_type),
+                calculate_col_attributes(clone)
+            );
             write!(f, "{}", addition).expect("unable to write");
         }
 
         if index == all_lines.len() - 1 {
             write!(f, "\n);").expect("unable to write");
         }
-
-        // output.push_str(&addition);
-        // }
     }
-
-    // print!("{:?}", output);
 
     // You can check for the existence of subcommands, and if found use their
     // matches just as you would the top level cmd
@@ -101,10 +101,32 @@ fn calculate_col_type(col_type: &String) -> &str {
 
         // Character types
         "char" | "CHAR" => "CHAR",
-        "varchar" | "VARCHAR" => "VARCHAR",
+        "varchar" | "VARCHAR" => "VARCHAR(255)",
         "text" | "TEXT" => "TEXT",
         _ => "Hello World",
     };
 
     return datatype;
+}
+
+fn calculate_col_attributes(col_attributes: Vec<String>) -> String {
+    let mut attribute_string = String::from("");
+
+    for (index, attr) in col_attributes.iter().enumerate() {
+        let datatype = match attr.as_str() {
+            "pk" => "PRIMARY KEY",
+            "unique" => "UNIQUE",
+            "nn" | "not null" | "NOT NULL" => "NOT NULL",
+
+            _ => "Hello World",
+        };
+
+        attribute_string.push_str(datatype);
+
+        if index == col_attributes.len() - 1 {
+            attribute_string.push_str(",");
+        }
+    }
+
+    return attribute_string;
 }
