@@ -117,12 +117,17 @@ fn calculate_col_attributes(col_attributes: Vec<String>) -> String {
     let mut attribute_string = String::from("");
 
     for (index, attr) in col_attributes.iter().enumerate() {
+        if col_attributes.len() > 1 && index > 0 {
+            attribute_string.push_str(" ");
+        }
+
         let datatype = match attr.as_str() {
             "pk" => "PRIMARY KEY",
             "unique" => "UNIQUE",
             "nn" | "not null" | "NOT NULL" => "NOT NULL",
+            "fk" => "references",
 
-            _ => "Hello World",
+            _ => attr,
         };
 
         attribute_string.push_str(datatype);

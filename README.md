@@ -18,6 +18,7 @@ Write the schema for your `users` table:
 ```schm
 table users
 id serial pk
+team_id int fk teams(id)
 name varchar
 email varchar unique
 ```
@@ -36,6 +37,8 @@ Schmake provides a number of aliases for common constraints
 
 - `PRIMARY KEY`
   - `pk`
+- `references`
+  - `fk`
 - `NOT NULL`
   - `nn`
   - `not null`
