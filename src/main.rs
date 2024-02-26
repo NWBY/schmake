@@ -115,6 +115,13 @@ fn calculate_col_type(col_type: &String) -> &str {
         "timestamptz" | "TIMESTAMPTZ" | "tmz" => "TIMESTAMPTZ",
         "interval" | "INTERVAL" | "intvl" => "INTERVAL",
 
+        // UUID type
+        "uuid" | "UUID" | "uid" => "UUID",
+
+        // JSON types
+        "json" | "JSON" => "JSON",
+        "jsonb" | "JSONB" => "JSONB",
+
         _ => "Hello World",
     };
 
