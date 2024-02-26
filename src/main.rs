@@ -107,6 +107,14 @@ fn calculate_col_type(col_type: &String) -> &str {
 
         // Boolean type
         "boolean" | "bool" => "BOOLEAN",
+
+        // Date types
+        "date" | "DATE" => "DATE",
+        "time" | "TIME" => "TIME",
+        "timestamp" | "TIMESTAMP" | "tm" => "TIMESTAMP",
+        "timestamptz" | "TIMESTAMPTZ" | "tmz" => "TIMESTAMPTZ",
+        "interval" | "INTERVAL" | "intvl" => "INTERVAL",
+
         _ => "Hello World",
     };
 
